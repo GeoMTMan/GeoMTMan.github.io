@@ -68,7 +68,7 @@ ga_domain: auto
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "中国科学院大学研究生在读，喜欢代码、游泳和吉他，女朋友叫萌萌。"
+sidebar-about-description: "我是李泯，中国科学院大学研究生在读，喜欢代码、游泳和吉他，女朋友叫萌萌。"
 sidebar-avatar: /img/limin.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
@@ -81,10 +81,7 @@ featured-condition-size: 1              # A tag will be featured if the size of 
 
 # Friends
 friends: [
-    {
-        title: "Hux Blog",
-        href: "http://huangxuan.me"
-    },{
+   {
         title: "GeoKylin",
         href: "http://GeoKylin.github.io"
     }
