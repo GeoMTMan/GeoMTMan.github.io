@@ -10,9 +10,9 @@
     <meta name="keyword"  content="李泯">
     <link rel="shortcut icon" href="/img/favicon.ico">
 
-    <title>使用Git将本地代码上传至Github仓库 - 李泯 | GeoMTMan</title>
+    <title>爬虫下载静态网页资源 - 李泯 | GeoMTMan</title>
 
-    <link rel="canonical" href="http://localhost:4000/2019/03/09/hello-git/">
+    <link rel="canonical" href="http://localhost:4000/2019/03/16/scrap-1/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -140,15 +140,17 @@
                 <div class="post-heading">
                     <div class="tags">
                         
-                        <a class="tag" href="/tags/#Git" title="Git">Git</a>
+                        <a class="tag" href="/tags/#python" title="python">python</a>
+                        
+                        <a class="tag" href="/tags/#scrap" title="scrap">scrap</a>
                         
                     </div>
-                    <h1>使用Git将本地代码上传至Github仓库</h1>
+                    <h1>爬虫下载静态网页资源</h1>
                     
                     
-                    <h2 class="subheading"> </h2>
+                    <h2 class="subheading">以爬取国家地理网站图片为例 </h2>
                     
-                    <span class="meta">Posted by Limin on March 9, 2019</span>
+                    <span class="meta">Posted by 李泯 on March 16, 2019</span>
                 </div>
             </div>
         </div>
@@ -166,25 +168,143 @@
                 col-md-10 col-md-offset-1
                 post-container">
 
-				<blockquote>
-  <p>“Yeah It’s on. ”</p>
-</blockquote>
+				<h3 id="下载图片pdfmp4等所使用的python模块">下载图片、pdf、mp4等所使用的python模块</h3>
 
-<h2 id="介绍">介绍</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s">'./img/'</span><span class="p">,</span> <span class="n">exist_ok</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="s">'''检查元素，获得下载地址'''</span>
+<span class="n">IMAGE_URL</span> <span class="o">=</span> <span class="s">"https://geomtman.github.io/img/limin.jpg"</span>
 
-<p>Github是所有程序员的宝藏，Github中有众多优秀的开源项目，我们可以查看源代码学习，或者Clone到本地加以改造后得到我们想要实现的效果。对于每个用户自己的本地仓库Repo中的各个项目，在项目管理或开发过程中，我们需要不断将本地新添加或者修改的代码同步至Github对应的项目中，对代码进行存放，并且其他同一项目的开发者也能看到相应的变化，提高开发效率。这篇post就介绍使用Git将本地代码上传至Github仓库时所要用到的一些命令。</p>
+</code></pre></div></div>
 
-<h2 id="git指令">Git指令</h2>
-<p>首先在项目文件夹中完成代码更新后，打开Git-Bash。接下来可以通过以下指令，完成代码上传Github。</p>
+<h3 id="way1urlretrieve">way1:urlretrieve</h3>
 
-<p><code class="highlighter-rouge">git add .</code>   此操作是把该项目文件夹下面的文件都添加进来</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlretrieve</span>
+ <span class="s">'''如何保存'''</span>
+<span class="n">urlretrieve</span><span class="p">(</span><span class="n">IMAGE_URL</span><span class="p">,</span> <span class="s">'./img/image1.png'</span><span class="p">)</span>
+</code></pre></div></div>
 
-<p><code class="highlighter-rouge">git commit  -m  "提交信息"</code>  此操作目的是进行代码提交，并附带一些关于此次提交的信息。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>('./img/image1.png', &lt;http.client.HTTPMessage at 0x23720f3ef0&gt;)
+</code></pre></div></div>
 
-<p><code class="highlighter-rouge">git push -u origin master</code>  此操作目的是把本地仓库push到github上面，此步骤需要你输入帐号和密码</p>
+<h3 id="way2requests">way2:requests</h3>
 
-<h2 id="参考">参考</h2>
-<p>关于Git的各种操作与使用，可以参考<a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/">廖雪峰Git教程</a>。</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">IMAGE_URL</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./img/image2.png'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h4 id="改进当下载内容较大时全部下载结束后再写入这样会占用过多的内存可以利用chunk分片下载chunk-by-chunk">改进：当下载内容较大时，全部下载结束后再写入，这样会占用过多的内存。可以利用“chunk”，分片下载，chunk by chunk</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">'''stream参数设为True，时时刻刻下载，就像一条小河'''</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">IMAGE_URL</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./img/image3.png'</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="激动人心的实战">激动人心的实战</h3>
+<h4 id="思路">思路：</h4>
+<h4 id="我们循环爬取国家地理网站httpwwwngchinacomcnanimals--的图片分析所要爬取的图片的元素特征它的标签之类的有什么共同特性使用-bs4-进行解析和提取使用requests-进行下载和保存">我们循环爬取国家地理网站（http://www.ngchina.com.cn/animals/ ） 的图片，分析所要爬取的图片的元素特征，它的标签之类的有什么共同特性，使用 bs4 进行解析和提取，使用requests 进行下载和保存。</h4>
+
+<h4 id="这是我们所要爬取的目标">这是我们所要爬取的目标：</h4>
+
+<p><img src="https://geomtman.github.io/img/in-post/post/scrap1.png" alt="爬取目标" /></p>
+
+<h4 id="我们可以以下两个特点定位到所要下载的图片">我们可以以下两个特点定位到所要下载的图片：</h4>
+<h5 id="ul标签中classimg_list和img标签">ul标签中class=”img_list”和img标签</h5>
+
+<p><img src="https://geomtman.github.io/img/in-post/post/scrap2.jpg" alt="元素审查" /></p>
+
+<h4 id="思路明确后代码搞起">思路明确后，代码搞起。</h4>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">URL</span> <span class="o">=</span> <span class="s">"http://www.ngchina.com.cn/animals/"</span>
+<span class="s">'''利用requests模块获得URL的html'''</span>
+<span class="n">html</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">URL</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+<span class="s">'''将html放入美丽汤中融化，解析方式为lxml，也可以选择其他模式'''</span>
+<span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+<span class="s">'''基于第一个特征进行第一次筛选'''</span>
+<span class="n">img_ul</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'ul'</span><span class="p">,</span> <span class="p">{</span><span class="s">"class"</span><span class="p">:</span> <span class="s">"img_list"</span><span class="p">})</span>
+
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">img_ul</span><span class="p">)</span><span class="s">'''打印img_url，我们可以看到输出的内容中包含我们所要下载的六个图片的url'''</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[&lt;ul class="img_list"&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/protection/9051.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0315/20190315032210262.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/facts/9036.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0307/20190307104540959.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/facts/9028.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0304/20190304105843578.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;, &lt;ul class="img_list"&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/facts/9024.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0227/20190227110652432.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/facts/9020.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0225/20190225033757437.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;li class="mod_w"&gt;
+&lt;div class="imgs cf"&gt;
+&lt;a href="/animals/facts/9016.html"&gt;&lt;img src="http://image.ngchina.com.cn/2019/0220/20190220104306406.jpg"/&gt;&lt;/a&gt;
+&lt;/div&gt;
+&lt;/li&gt;
+&lt;/ul&gt;]
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s">'./img/'</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span> <span class="bp">True</span><span class="p">)</span><span class="s">'''通过os模块实现文件的保存'''</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s">'''开始设置循环。进行下载
+在img_ul对应的html中，存在两组 ul 标签，每一个ul标签内包含3个 img 标签，
+分别对应于不同图片
+因此，需要针对 ul 和 img 设置两层循环，进行下载。'''</span>
+<span class="k">for</span> <span class="n">ul</span> <span class="ow">in</span> <span class="n">img_ul</span><span class="p">:</span>
+    <span class="n">imgs</span> <span class="o">=</span> <span class="n">ul</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'img'</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">imgs</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="s">'src'</span><span class="p">]</span>
+        <span class="s">'''采用chunk分片下载方式'''</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">stream</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="s">'''将图片名设置为划分url后的最后一个元素'''</span>
+        <span class="n">image_name</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">'/'</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./img/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">,</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">r</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">chunk_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">'已保存 </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">image_name</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>已保存 20190315032210262.jpg
+已保存 20190307104540959.jpg
+已保存 20190304105843578.jpg
+已保存 20190227110652432.jpg
+已保存 20190225033757437.jpg
+已保存 20190220104306406.jpg
+</code></pre></div></div>
+
+<p>大功告成，随便打开一个图片。</p>
+
+<p><img src="https://geomtman.github.io/img/in-post/post/20190304105843578.jpg" alt="爬取结果" /></p>
 
 
                 <hr>
@@ -194,10 +314,10 @@
 
                 <ul class="pager">
                     
-                    
-                    <li class="next">
-                        <a href="/2019/03/16/scrap-1/" data-toggle="tooltip" data-placement="top" title="爬虫下载静态网页资源">Next Post &rarr;</a>
+                    <li class="previous">
+                        <a href="/2019/03/09/hello-git/" data-toggle="tooltip" data-placement="top" title="使用Git将本地代码上传至Github仓库">&larr; Previous Post</a>
                     </li>
+                    
                     
                 </ul>
 
@@ -260,8 +380,8 @@
 <script type="text/javascript">
     /* * * CONFIGURATION VARIABLES * * */
     var disqus_shortname = "minerhaoxue";
-    var disqus_identifier = "/2019/03/09/hello-git";
-    var disqus_url = "http://localhost:4000/2019/03/09/hello-git/";
+    var disqus_identifier = "/2019/03/16/scrap-1";
+    var disqus_url = "http://localhost:4000/2019/03/16/scrap-1/";
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
