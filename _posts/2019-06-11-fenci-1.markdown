@@ -7,7 +7,8 @@ author:     "李泯"
 header-img: "img/post-bg-unix-linux.jpg"
 tags:
     - python
-    - scrap
+    - 分词
+    - Bayes
 ---
     夏天吃西瓜！
 
